@@ -1,0 +1,29 @@
+import pandas as pd
+def convert_date_abbreviations(input_file, output_file):
+    # Read the Excel file
+    df = pd.read_excel(input_file)
+    # Split the 'observed_date' column into 'Year' and 'Month' based on '/'
+    df[['Year', 'Month']] = df['observed_date'].str.split('/', expand=True)
+    # Define a dictionary mapping three-letter month abbreviations to two-digit numeric values
+    month_mapping = {
+        'Jan': '01',
+        'Feb': '02',
+        'Mar': '03',
+        'Apr': '04',
+        'May': '05',
+        'Jun': '06',
+        'Jul': '07',
+        'Aug': '08',
+        'Sep': '09',
+        'Oct': '10',
+        'Nov': '11',
+        'Dec': '12'
+    }
+    # Convert three-letter abbreviations to two-digit numeric values
+    df['Month'] = df['Month'].map(month_mapping)
+    # Replace "/" with "-"
+    df['observed_date'] = df['Year'] + '-' + df['Month']
+    # Drop unnecessary columns
+    df = df[['observed_date', 'Weekly_Hours']]
+    # Write the result DataFrame to a new Excel file
+    df.to_excel(output_file, index=False)

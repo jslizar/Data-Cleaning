@@ -1,0 +1,17 @@
+def convert_excel_to_rows(input_file, output_file):
+    # Read the Excel file
+    df = pd.read_excel(input_file)
+    # Melt the DataFrame to convert columns into rows
+    melted_df = df.melt(id_vars=["Year"], var_name="Month", value_name="Weekly_Hours")
+    # Combine the Year and Month columns to create the observed_date column
+    melted_df["observed_date"] = melted_df["Year"].astype(str) + "/" + melted_df["Month"]
+    # Drop unnecessary columns
+    melted_df = melted_df[["observed_date", "Weekly_Hours"]]
+    # Write the result DataFrame to a new Excel file
+    melted_df.to_excel(output_file, index=False)
+# Specify the input Excel file path
+input_file = '/Users/jacoblizarraga/Desktop/Regression project/OneDrive_1_11-29-2023/Additional data/Cleaned_hourly_worker_auto_dealer.xlsx'
+# Specify the output Excel file path
+output_file = '/Users/jacoblizarraga/Desktop/Regression project/OneDrive_1_11-29-2023/Additional data/auto_dealers_weekly_hours_output_file.xlsx'
+# Call the function to convert the Excel sheet
+convert_excel_to_rows(input_file, output_file)
